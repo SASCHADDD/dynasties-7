@@ -16,6 +16,8 @@ return Application::configure(basePath: dirname(__DIR__))
             '/register',
             '/login',
             '/logout',
+            '/genres*',
+            '/films*',
         ]);
     })
 

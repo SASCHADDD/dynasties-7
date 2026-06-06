@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Services\AuthService;
+use Illuminate\Support\Facades\Auth;
 
 use Illuminate\Http\Request;
 
@@ -42,26 +43,24 @@ class AuthController extends Controller
         ]);
 
         // 2. Eksekusi proses login di Service
-        $pengguna = $this->authService->login($credentials);
+        $result = $this->authService->login($credentials);
 
         // 3. Tangani Response
-        if (!$pengguna) {
+        if (!$result) {
             return response()->json(['pesan' => 'Nama pengguna atau kata sandi salah'], 401);
         }
 
         return response()->json([
-            'pesan' => 'Login berhasil',
-            'peran' => $pengguna->peran
+            'pesan'  => 'Login berhasil',
+            'peran'  => $result['pengguna']->peran,
+            'token'  => $result['token'],
         ], 200);
     }
 
     public function logout(Request $request)
     {
-        $this->authService->logout();
-        
-        // Hancurkan session untuk keamanan
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
+        $pengguna = Auth::user();
+        $this->authService->logout($pengguna);
 
         return response()->json(['pesan' => 'Logout berhasil'], 200);
     }

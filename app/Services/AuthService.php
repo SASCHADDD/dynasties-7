@@ -3,7 +3,6 @@ namespace App\Services;
 
 use App\Models\Pengguna;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Auth;
 
 class AuthService
 {
@@ -28,9 +27,12 @@ class AuthService
 
         // Memeriksa apakah pengguna ada dan kata sandi cocok
         if ($pengguna && Hash::check($credentials['kata_sandi'], $pengguna->kata_sandi)) {
-            // Mendaftarkan session login
-            Auth::login($pengguna);
-            return $pengguna;
+            // Buat token Sanctum untuk pengguna
+            $token = $pengguna->createToken('auth_token')->plainTextToken;
+            return [
+                'pengguna' => $pengguna,
+                'token'    => $token,
+            ];
         }
 
         return false; // Login gagal
@@ -39,8 +41,9 @@ class AuthService
    
      //Logika untuk logout
      
-    public function logout()
+    public function logout($pengguna)
     {
-        Auth::logout();
+        // Cabut semua token milik pengguna
+        $pengguna->tokens()->delete();
     }
 }
