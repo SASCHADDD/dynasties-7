@@ -7,6 +7,71 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
+## Cara Menjalankan Proyek Ini di Komputer Lokal
+
+**1. Clone Repository**
+Buka terminal/Command Prompt, lalu jalankan perintah berikut untuk mengunduh proyek dari GitHub:
+```bash
+git clone <MASUKKAN_URL_GITHUB_DI_SINI>
+```
+*(Ganti `<MASUKKAN_URL_GITHUB_DI_SINI>` dengan link repository GitHub kamu)*
+
+**2. Masuk ke Folder Proyek**
+Pindah ke direktori proyek yang baru saja diunduh:
+```bash
+cd dynasties-7
+```
+
+**3. Install Dependency Laravel**
+Karena file *library* pendukung tidak diunggah ke GitHub, kamu harus menginstalnya sendiri menggunakan Composer:
+```bash
+composer install
+```
+
+**4. Buat File Konfigurasi (.env)**
+Salin file konfigurasi bawaan Laravel:
+- Jika menggunakan **Windows (Command Prompt/PowerShell)**:
+  ```cmd
+  copy .env.example .env
+  ```
+- Jika menggunakan **Mac/Linux/Git Bash**:
+  ```bash
+  cp .env.example .env
+  ```
+
+**5. Generate Application Key**
+Buat kunci keamanan unik untuk aplikasi ini:
+```bash
+php artisan key:generate
+```
+
+**6. Atur Database di File `.env`**
+Buka file `.env` menggunakan teks editor (seperti VS Code atau Notepad), lalu cari bagian konfigurasi database dan sesuaikan dengan database di komputermu (misalnya menggunakan XAMPP/MySQL):
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=nama_database_kamu
+DB_USERNAME=root
+DB_PASSWORD=
+```
+*(Pastikan kamu sudah membuat database kosong di phpMyAdmin atau MySQL dengan nama yang sama persis seperti di `DB_DATABASE`)*.
+
+**7. Jalankan Migrasi Database (dan Seeder)**
+Buat tabel-tabel yang dibutuhkan di database dan masukkan data awal (seperti akun admin) dengan perintah:
+```bash
+php artisan migrate --seed
+```
+
+**8. Jalankan Server**
+Nyalakan *local server* agar aplikasi bisa diakses:
+```bash
+php artisan serve
+```
+Buka browser atau Postman dan akses: `http://127.0.0.1:8000`
+
+---
+
 ## About Laravel
 
 Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
