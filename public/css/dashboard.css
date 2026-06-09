@@ -1,0 +1,399 @@
+/* Dashboard CSS – Premium cinematic design */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+html {
+    scroll-behavior: smooth;
+}
+
+
+body.dashboard-body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    background-color: #ffffff;
+    color: #333333;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* NARA Navbar Header */
+.nara-header {
+    background-color: #333333;
+    padding: 12px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.nara-header-left {
+    display: flex;
+    align-items: center;
+}
+
+.nara-logo {
+    color: #e50914; /* Netflix-like Nara Red */
+    font-size: 2.1rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    margin-right: 45px;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
+
+.nara-nav {
+    display: flex;
+    gap: 25px;
+}
+
+.nara-nav-item {
+    color: #b3b3b3;
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 600;
+    transition: color 0.2s;
+}
+
+.nara-nav-item:hover,
+.nara-nav-item.active {
+    color: #ffffff;
+}
+
+.nara-logout-btn {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    color: #ffffff;
+    padding: 6px 18px;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s, border-color 0.2s;
+}
+
+.nara-logout-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: #ffffff;
+}
+
+.dashboard-main {
+    flex: 1;
+    width: 100%;
+}
+
+/* Container & Sections */
+.nara-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 40px;
+}
+
+.nara-section {
+    margin-bottom: 50px;
+}
+
+.nara-section-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #111111;
+    margin: 0 0 25px 0;
+    letter-spacing: -0.5px;
+}
+
+/* Horizontally scrolling sliders */
+.nara-slider {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    padding-bottom: 15px;
+    scrollbar-width: none; /* Firefox */
+}
+
+.nara-slider::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+}
+
+/* Grids */
+.nara-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    grid-gap: 30px 20px;
+}
+
+/* Cards */
+.nara-card {
+    flex: 0 0 180px;
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+}
+
+.nara-poster-wrapper {
+    position: relative;
+    aspect-ratio: 2/3;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: #f0f0f0;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.nara-card:hover .nara-poster-wrapper {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.16);
+}
+
+.nara-poster {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Small ranking number at the top left of the card */
+.nara-rank {
+    position: absolute;
+    top: 8px;
+    left: 10px;
+    color: rgba(255, 255, 255, 0.3);
+    font-size: 0.95rem;
+    font-weight: 700;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+    z-index: 2;
+}
+
+/* Badge (e.g. WEBDL) */
+.nara-badge {
+    position: absolute;
+    top: 8px;
+    left: 10px;
+    background: rgba(0, 0, 0, 0.65);
+    color: #ffffff;
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 3px 7px;
+    border-radius: 3px;
+    letter-spacing: 0.5px;
+    z-index: 2;
+}
+
+.nara-card-info {
+    padding-top: 10px;
+}
+
+.nara-card-title {
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: #333333;
+    margin: 0;
+    line-height: 1.35;
+}
+
+/* Auth screen styles */
+.auth-container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+/* Tilted Grid of Movie Posters */
+.auth-bg-grid {
+    position: absolute;
+    top: -30%;
+    left: -20%;
+    width: 140%;
+    height: 160%;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+    grid-gap: 20px;
+    transform: rotate(-10deg) skewX(-5deg) scale(1.1);
+    z-index: 1;
+}
+
+.poster-card {
+    background-size: cover;
+    background-position: center;
+    border-radius: 12px;
+    aspect-ratio: 2/3;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+    opacity: 0.85;
+    transition: transform 0.3s ease;
+}
+
+/* Dark Radial/Linear Overlay for cinema atmosphere */
+.auth-bg-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.8) 60%, rgba(0, 0, 0, 0.95) 100%);
+    z-index: 2;
+}
+
+/* Centered Glassmorphism Login Card */
+.auth-card {
+    position: relative;
+    z-index: 10;
+    width: 90%;
+    max-width: 440px;
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 50px 40px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+    box-sizing: border-box;
+}
+
+.auth-title {
+    font-size: 2.2rem;
+    font-weight: 600;
+    color: #ffffff;
+    text-align: center;
+    margin: 0 0 8px 0;
+}
+
+.auth-subtitle {
+    font-size: 0.875rem;
+    color: rgba(255, 255, 255, 0.7);
+    text-align: center;
+    margin: 0 0 35px 0;
+}
+
+/* Input Styles */
+.auth-input-wrapper {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.auth-input {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.08) !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    border-radius: 9999px !important;
+    padding: 14px 50px 14px 24px !important;
+    color: #ffffff !important;
+    font-size: 0.95rem !important;
+    box-sizing: border-box !important;
+    outline: none !important;
+    transition: border-color 0.3s, background-color 0.3s !important;
+}
+
+.auth-input:focus {
+    border-color: rgba(255, 255, 255, 0.8) !important;
+    background-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+.auth-input::placeholder {
+    color: rgba(255, 255, 255, 0.5) !important;
+}
+
+/* Icon inside input fields on the right side */
+.auth-input-icon {
+    position: absolute;
+    right: 22px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 18px;
+    height: 18px;
+    color: rgba(255, 255, 255, 0.6);
+    pointer-events: none;
+}
+
+/* Checkbox and Forgot Password Link */
+.auth-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    font-size: 0.85rem;
+}
+
+.auth-remember {
+    display: flex;
+    align-items: center;
+    color: rgba(255, 255, 255, 0.8);
+    cursor: pointer;
+}
+
+.auth-remember input {
+    margin-right: 8px;
+    accent-color: #ffffff;
+    cursor: pointer;
+}
+
+.auth-forgot {
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.auth-forgot:hover {
+    color: #ffffff;
+    text-decoration: underline;
+}
+
+/* Submit Button */
+.auth-btn {
+    width: 100%;
+    background: #ffffff;
+    color: #000000;
+    border: none;
+    border-radius: 9999px;
+    padding: 14px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+    margin-bottom: 25px;
+}
+
+.auth-btn:hover {
+    background-color: #e5e5e5;
+}
+
+.auth-btn:active {
+    transform: scale(0.98);
+}
+
+/* Footer link */
+.auth-footer {
+    text-align: center;
+    font-size: 0.875rem;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.auth-footer a {
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: 700;
+}
+
+.auth-footer a:hover {
+    text-decoration: underline;
+}
+
+.auth-alert-error {
+    background-color: rgba(239, 68, 68, 0.2);
+    border: 1px solid rgba(239, 68, 68, 0.4);
+    color: #fca5a5;
+    padding: 10px 16px;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+footer {
+    text-align: center;
+    padding: 2rem 1rem;
+    font-size: 0.9rem;
+    color: #777777;
+    background-color: #fafafa;
+    border-top: 1px solid #eeeeee;
+}
