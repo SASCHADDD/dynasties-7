@@ -27,11 +27,18 @@ class AuthController extends Controller
         // 2. Eksekusi logika bisnis di Service
         $pengguna = $this->authService->registerUser($validatedData);
 
+        // Auto log in user into session
+        Auth::login($pengguna);
+
         // 3. Kembalikan Response
-        return response()->json([
-            'pesan' => 'Registrasi berhasil',
-            'data' => $pengguna
-        ], 201);
+        if ($request->wantsJson() || $request->ajax()) {
+            return response()->json([
+                'pesan' => 'Registrasi berhasil',
+                'data' => $pengguna
+            ], 201);
+        }
+
+        return redirect('/dashboard');
     }
 
     public function login(Request $request)
@@ -47,21 +54,41 @@ class AuthController extends Controller
 
         // 3. Tangani Response
         if (!$result) {
-            return response()->json(['pesan' => 'Nama pengguna atau kata sandi salah'], 401);
+            if ($request->wantsJson() || $request->ajax()) {
+                return response()->json(['pesan' => 'Nama pengguna atau kata sandi salah'], 401);
+            }
+            return back()->with('error', 'Nama pengguna atau kata sandi salah.')->withInput();
         }
 
-        return response()->json([
-            'pesan'  => 'Login berhasil',
-            'peran'  => $result['pengguna']->peran,
-            'token'  => $result['token'],
-        ], 200);
+        // Log the user in to the web session
+        Auth::login($result['pengguna'], $request->boolean('remember'));
+
+        if ($request->wantsJson() || $request->ajax()) {
+            return response()->json([
+                'pesan'  => 'Login berhasil',
+                'peran'  => $result['pengguna']->peran,
+                'token'  => $result['token'],
+            ], 200);
+        }
+
+        return redirect('/dashboard');
     }
 
     public function logout(Request $request)
     {
         $pengguna = Auth::user();
-        $this->authService->logout($pengguna);
+        if ($pengguna) {
+            $this->authService->logout($pengguna);
+        }
 
-        return response()->json(['pesan' => 'Logout berhasil'], 200);
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        if ($request->wantsJson() || $request->ajax()) {
+            return response()->json(['pesan' => 'Logout berhasil'], 200);
+        }
+
+        return redirect('/login');
     }
 }
