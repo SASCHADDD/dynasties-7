@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('film', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('genre_id')->constrained('genre')->onDelete('cascade');
-            $table->string('judul');
+            $table->foreignId('genre_id')->constrained('genre')->onDelete('cascade');            $table->string('judul');
             $table->text('deskripsi')->nullable();
+            $table->enum('tipe', ['film', 'acara_tv'])->default('film');
             $table->integer('durasi')->nullable();
             $table->integer('tahun_rilis')->nullable();
             $table->string('poster')->nullable();

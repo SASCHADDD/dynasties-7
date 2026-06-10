@@ -3,98 +3,140 @@
 @section('title', 'Home')
 
 @section('content')
-@php
-    $defaultFilms = [
-        [
-            'judul' => 'Everything Everywhere All At Once',
-            'poster' => 'https://images.unsplash.com/photo-1626814026160-2237a95fc5a0?w=300&auto=format&fit=crop',
-            'rating' => 'WEBDL'
-        ],
-        [
-            'judul' => 'The Grand Budapest Hotel',
-            'poster' => 'https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?w=300&auto=format&fit=crop',
-            'rating' => 'WEBDL'
-        ],
-        [
-            'judul' => 'Spirited Away',
-            'poster' => 'https://images.unsplash.com/photo-1578632767115-351597cf2477?w=300&auto=format&fit=crop',
-            'rating' => 'WEBDL'
-        ],
-        [
-            'judul' => 'The Matrix',
-            'poster' => 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=300&auto=format&fit=crop',
-            'rating' => 'WEBDL'
-        ],
-        [
-            'judul' => 'Parasite',
-            'poster' => 'https://images.unsplash.com/photo-1535016120720-40c646be5580?w=300&auto=format&fit=crop',
-            'rating' => 'WEBDL'
-        ],
-        [
-            'judul' => 'Inception',
-            'poster' => 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=300&auto=format&fit=crop',
-            'rating' => 'WEBDL'
-        ]
-    ];
+<style>
+    :root { 
+        --primary: #e50914; 
+        --bg: #121212; 
+        --surface: #1e1e1e; 
+        --border: #333; 
+        --text: #e0e0e0; 
+    }
 
-    // Build collections to display
-    $topFilms = $recentFilms->count() > 0 ? $recentFilms : collect($defaultFilms)->map(fn($f) => (object)$f);
-    $topTvShows = collect($defaultFilms)->shuffle()->map(fn($f) => (object)$f);
-    $allMedia = $recentFilms->count() > 0 ? $recentFilms : collect($defaultFilms)->map(fn($f) => (object)$f);
-@endphp
+    .nara-container { 
+        max-width: 1100px; 
+        margin: 0 auto; 
+        padding: 40px 20px; 
+    }
+
+    .nara-section { 
+        margin-bottom: 50px; 
+    }
+
+    .nara-section-title { 
+        color: #fff; 
+        font-size: 1.6rem;
+        font-weight: 700;
+        margin-bottom: 25px;
+        border-left: 4px solid var(--primary);
+        padding-left: 15px;
+        line-height: 1.2;
+    }
+
+    /* Grid Layout Responsif */
+    .nara-grid { 
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        gap: 25px;
+    }
+
+    /* Premium Card Design */
+    .nara-card { 
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+        transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .nara-card:hover {
+        transform: translateY(-5px);
+        border-color: var(--primary);
+        box-shadow: 0 8px 25px rgba(229, 9, 20, 0.3);
+    }
+
+    .nara-poster-wrapper { 
+        position: relative;
+        width: 100%;
+        aspect-ratio: 2 / 3; 
+        overflow: hidden;
+        background: #1a1a1a;     }
+
+    .nara-poster { 
+        width: 100%;
+        height: 100%; 
+        object-fit: cover; 
+        object-position: center; 
+        transition: transform 0.5s ease;
+    }
+
+    .nara-card:hover .nara-poster {
+        transform: scale(1.05);
+    }
+
+    .nara-card-info { 
+        padding: 15px; 
+    }
+
+    .nara-card-title { 
+        margin: 0;
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: #fff;
+        line-height: 1.4;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        height: 2.7em; /* Membatasi tinggi teks judul agar rapi sejajar */
+    }
+
+    .empty-text { 
+        color: #888; 
+        font-style: italic;
+        grid-column: 1 / -1;
+        padding: 20px 0;
+    }
+</style>
 
 <div class="nara-container">
-    <!-- Section 1: Top 10 Films -->
     <section class="nara-section" id="film-section">
-        <h2 class="nara-section-title">10 Film Teratas di Indonesia Hari Ini</h2>
-        <div class="nara-slider">
-            @foreach($topFilms as $index => $item)
-                <div class="nara-card">
-                    <div class="nara-poster-wrapper">
-                        <span class="nara-rank">{{ $index + 1 }}</span>
-                        <img src="{{ $item->poster ?? 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=300' }}" alt="{{ $item->judul }}" class="nara-poster" />
-                    </div>
-                    <div class="nara-card-info">
-                        <h3 class="nara-card-title">{{ $item->judul }}</h3>
-                    </div>
-                </div>
-            @endforeach
-        </div>
-    </section>
-
-    <!-- Section 2: Top 10 TV Shows -->
-    <section class="nara-section" id="tv-section">
-        <h2 class="nara-section-title">10 Acara TV Teratas di Indonesia Hari Ini</h2>
-        <div class="nara-slider">
-            @foreach($topTvShows as $index => $item)
-                <div class="nara-card">
-                    <div class="nara-poster-wrapper">
-                        <span class="nara-rank">{{ $index + 1 }}</span>
-                        <img src="{{ $item->poster ?? 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=300' }}" alt="{{ $item->judul }}" class="nara-poster" />
-                    </div>
-                    <div class="nara-card-info">
-                        <h3 class="nara-card-title">{{ $item->judul }}</h3>
-                    </div>
-                </div>
-            @endforeach
-        </div>
-    </section>
-
-    <!-- Section 3: Film & Acara TV Grid -->
-    <section class="nara-section" id="all-media-section">
-        <h2 class="nara-section-title">Film & Acara Tv</h2>
+        <h2 class="nara-section-title">Film Terbaru</h2>
         <div class="nara-grid">
-            @foreach($allMedia as $item)
+            @forelse($recentFilms as $item)
                 <div class="nara-card">
                     <div class="nara-poster-wrapper">
-                        <span class="nara-badge">WEBDL</span>
-                        <img src="{{ $item->poster ?? 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=300' }}" alt="{{ $item->judul }}" class="nara-poster" />
+                        <a href="{{ url('/tonton/' . $item->id) }}">
+                            <img src="{{ $item->poster ?? 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=300' }}" alt="{{ $item->judul }}" class="nara-poster" />
+                        </a>
                     </div>
                     <div class="nara-card-info">
                         <h3 class="nara-card-title">{{ $item->judul }}</h3>
                     </div>
                 </div>
-            @endforeach
+            @empty
+                <p class="empty-text">Belum ada data film terbaru.</p>
+            @endforelse
+        </div>
+    </section>
+
+    <section class="nara-section" id="tv-section">
+        <h2 class="nara-section-title">Acara TV Terbaru</h2>
+        <div class="nara-grid">
+            @forelse($recentTvShows as $item)
+                <div class="nara-card">
+                    <div class="nara-poster-wrapper">
+                        <a href="{{ url('/tonton/' . $item->id) }}">
+                            <img src="{{ $item->poster ?? 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=300' }}" alt="{{ $item->judul }}" class="nara-poster" />
+                        </a>
+                    </div>
+                    <div class="nara-card-info">
+                        <h3 class="nara-card-title">{{ $item->judul }}</h3>
+                    </div>
+                </div>
+            @empty
+                <p class="empty-text">Belum ada data acara TV terbaru.</p>
+            @endforelse
         </div>
     </section>
 </div>

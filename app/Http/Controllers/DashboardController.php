@@ -2,28 +2,37 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Models\Film;
 use App\Models\Genre;
-use Illuminate\Http\Request;
+use App\Models\RiwayatTontonan; // Import Model Riwayat
+use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
-    /**
-     * Show the user dashboard.
-     *
-     * This method gathers a few summary statistics that are displayed on the
-     * dashboard view. Adjust the queries as needed to match the exact data you
-     * want to present.
-     */
     public function index()
     {
-        // Basic summary data – you can extend this with more sophisticated
-        // metrics (e.g., recent watches, user profile, etc.).
         $filmCount = Film::count();
         $genreCount = Genre::count();
-        $recentFilms = Film::orderByDesc('dibuat_pada')->limit(5)->get();
+        
+        // REVISI 1: Hanya mengambil konten yang bertipe 'film'
+        $recentFilms = Film::where('tipe', 'film')
+                            ->orderByDesc('dibuat_pada')
+                            ->limit(10)
+                            ->get();
 
-        return view('dashboard', compact('filmCount', 'genreCount', 'recentFilms'));
+        // REVISI 2: Hanya mengambil konten yang bertipe 'acara_tv'
+        $recentTvShows = Film::where('tipe', 'acara_tv')
+                            ->orderByDesc('dibuat_pada')
+                            ->limit(10)
+                            ->get();
+
+        $riwayat = RiwayatTontonan::with('film')
+                    ->where('pengguna_id', Auth::id())
+                    ->orderBy('ditonton_pada', 'desc')
+                    ->limit(10) 
+                    ->get();
+
+        // REVISI 3: Pastikan variabel $recentTvShows ikut dikirim (compact) ke halaman view
+        return view('dashboard', compact('filmCount', 'genreCount', 'recentFilms', 'recentTvShows', 'riwayat'));
     }
 }

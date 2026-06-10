@@ -11,7 +11,13 @@ return Application::configure(basePath: dirname(__DIR__))
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
     )
-    ->withMiddleware(function (Middleware $middleware): void {
+    ->withMiddleware(function (Middleware $middleware) {
+        // 1. Daftarkan alias 'admin' agar route mengenali middleware tersebut
+        $middleware->alias([
+            'admin' => \App\Http\Middleware\EnsureUserIsAdmin::class,
+        ]);
+
+        // 2. Tetap pertahankan pengecualian CSRF Anda
         $middleware->validateCsrfTokens(except: [
             '/register',
             '/login',
@@ -20,9 +26,7 @@ return Application::configure(basePath: dirname(__DIR__))
             '/films*',
         ]);
     })
-
-
-    ->withExceptions(function (Exceptions $exceptions): void {
+    ->withExceptions(function (Exceptions $exceptions) {
         $exceptions->shouldRenderJsonWhen(
             fn (Request $request) => $request->is('api/*'),
         );

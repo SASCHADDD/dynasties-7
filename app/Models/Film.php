@@ -13,6 +13,7 @@ class Film extends Model
 
     protected $fillable = [
         'genre_id',
+        'tipe',
         'judul',
         'deskripsi',
         'durasi',

@@ -76,19 +76,20 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
+        // 1. Ambil data user saat masih login
         $pengguna = Auth::user();
+
+        // 2. Jalankan logika service (jika ada) menggunakan data user yang sudah diambil
         if ($pengguna) {
             $this->authService->logout($pengguna);
         }
 
+        // 3. Baru lakukan logout dan hapus sesi
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        if ($request->wantsJson() || $request->ajax()) {
-            return response()->json(['pesan' => 'Logout berhasil'], 200);
-        }
-
+        // 4. Redirect
         return redirect('/login');
     }
 }

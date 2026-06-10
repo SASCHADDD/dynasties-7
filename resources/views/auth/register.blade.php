@@ -1,27 +1,3 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Register</title>
-    <style>
-        body { background: url('background-film.jpg'); background-size: cover; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .login-box { background: rgba(0, 0, 0, 0.8); padding: 40px; border-radius: 10px; color: white; width: 350px; }
-        input { width: 100%; margin: 10px 0; padding: 10px; background: #333; border: none; color: white; }
-        button { width: 100%; padding: 10px; background: #e50914; border: none; color: white; cursor: pointer; }
-    </style>
-</head>
-<body>
-    <div class="login-box">
-        <h2>Daftar Akun</h2>
-        <form action="/register" method="POST">
-            @csrf
-            <input type="text" name="nama_pengguna" placeholder="Username" required>
-            <input type="password" name="kata_sandi" placeholder="Password" required>
-            <button type="submit">Daftar Sekarang</button>
-        </form>
-        <p>Sudah punya akun? <a href="/login">Login di sini</a></p>
-    </div>
-</body>
-</html>
 @extends('layouts.auth')
 
 @section('title', 'Register')
@@ -57,17 +33,14 @@
 @endphp
 
 <div class="auth-container">
-    <!-- Grid of tilted movie posters in background -->
     <div class="auth-bg-grid">
         @foreach($posters as $poster)
             <div class="poster-card" style="background-image: url('{{ $poster }}');"></div>
         @endforeach
     </div>
     
-    <!-- Cinematic dark overlay -->
     <div class="auth-bg-overlay"></div>
 
-    <!-- Register card -->
     <div class="auth-card">
         <h2 class="auth-title">Register</h2>
         <p class="auth-subtitle">Silahkan Masukan Username & Password</p>
@@ -76,34 +49,20 @@
             <div class="auth-alert-error">{{ session('error') }}</div>
         @endif
 
-        <form method="POST" action="{{ route('register.submit') }}">
+        <form method="POST" action="/register">
             @csrf
-            
-            <!-- Username Input -->
             <div class="auth-input-wrapper">
                 <input type="text" name="nama_pengguna" placeholder="Username" required class="auth-input" autocomplete="username" />
-                <svg xmlns="http://www.w3.org/2000/svg" class="auth-input-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                </svg>
             </div>
 
-            <!-- Password Input -->
             <div class="auth-input-wrapper">
                 <input type="password" name="kata_sandi" placeholder="Password" required class="auth-input" autocomplete="new-password" />
-                <svg xmlns="http://www.w3.org/2000/svg" class="auth-input-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                </svg>
             </div>
 
-            <!-- Spacer equivalent to remember/forgot section in login to keep design balance -->
-            <div style="height: 20px;"></div>
-
-            <!-- Submit Button -->
             <button type="submit" class="auth-btn">Sign up</button>
 
-            <!-- Footer links -->
             <div class="auth-footer">
-                Sudah punya akun? <a href="{{ route('login') }}">Login di sini.</a>
+                Sudah punya akun? <a href="/login">Login di sini.</a>
             </div>
         </form>
     </div>
