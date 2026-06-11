@@ -1,30 +1,57 @@
 @startuml
 skinparam componentStyle rectangle
 
-node "Client Layer" {
-  [Web Browser] as browser
+node "Client / Browser" {
+  [Antarmuka Pengguna] as ui
 }
 
-node "Server Environment (Laragon / PHP 8.x)" {
-  node "Web Server" as webserver
+node "Node.js Environment" {
   
-  package "Laravel Application (MVC)" {
-    [Routes] as routes
-    [Controllers] as controllers
-    [Models (Eloquent)] as models
-    [Views (Blade)] as views
+  package "Testing Environment" {
+    [tests/\n(Jest Tests)] as tests
+    [src/\n(API Modules)] as src
   }
-  
-  database "MySQL Database" as db
+
+  [app.js\n(Main Server)] as appjs
+
+  package "Frontend & Storage" {
+    [uploads/\n(Images)] as uploads
+    [views/\n(EJS Templates)] as views
+    [public/\n(Static Assets)] as public
+  }
+
+  package "Routing & Middleware" {
+    [routes/authRoutes.js] as auth
+    [routes/filmRoutes.js] as film
+    [middlewares/middleware.js] as middleware
+  }
+
+  [database/db.js\n(MySQL Config)] as dbconfig
 }
 
-browser <--> webserver : HTTP / HTTPS Request & Response
+database "MySQL Server" {
+  [Database: dynasties] as db
+}
 
-webserver --> routes : Meneruskan Request
-routes --> controllers : Mengarahkan ke fungsi yang sesuai
-controllers --> models : Meminta/Mengubah Data (CRUD)
-models <--> db : Menjalankan Query SQL
-controllers --> views : Mengirimkan Data untuk Dirender
-views --> webserver : Mengembalikan HTML Web Page
+' Relasi
+ui --> appjs : HTTP Requests
+
+tests --> src : Execute Tests
+src --> dbconfig : Query
+
+appjs --> views
+appjs --> public
+appjs --> uploads
+appjs --> auth
+appjs --> film
+appjs --> dbconfig : Import
+
+auth --> dbconfig : Query
+film --> dbconfig : Query
+
+auth ..> middleware : Cek Auth
+film ..> middleware : Cek Auth
+
+dbconfig --> db : Execute
 
 @enduml
