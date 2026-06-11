@@ -1,0 +1,29 @@
+@startuml
+left to right direction
+
+actor "Pengguna" as pengguna
+actor "Admin" as admin
+
+rectangle "Sistem Rekomendasi Film" {
+  usecase "Akses Dashboard" as dashboard
+  usecase "Tonton Film" as tonton
+  usecase "Lihat Riwayat Tontonan" as riwayat
+  usecase "Kelola Data Film" as kelolafilm
+  usecase "Login" as login
+  usecase "Logout" as logout
+}
+
+pengguna -- dashboard
+pengguna -- tonton
+pengguna -- riwayat
+
+admin -- dashboard
+admin -- kelolafilm
+
+dashboard ..> login : <<include>>
+tonton ..> login : <<include>>
+riwayat ..> login : <<include>>
+kelolafilm ..> login : <<include>>
+
+login ..> logout : <<extend>>
+@enduml
