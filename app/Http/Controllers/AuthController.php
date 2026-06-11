@@ -71,6 +71,10 @@ class AuthController extends Controller
             ], 200);
         }
 
+        if ($result['pengguna']->peran === 'admin') {
+            return redirect('/admin');
+        }
+
         return redirect('/dashboard');
     }
 
