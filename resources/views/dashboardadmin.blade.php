@@ -166,10 +166,23 @@
 <body>
 
 <div class="container">
-    <div class="header">
-        <h1>Admin Dashboard</h1>
-        <a href="/films/create" class="btn-add">+ Tambah Film</a>
-    </div>
+        <div class="header">
+            <h1>Admin Dashboard</h1>
+            
+            <div style="display: flex; gap: 12px; align-items: center;">
+                
+                <a href="/films/create" class="btn-add">+ Tambah Film</a>
+                
+                <form action="{{ route('logout') }}" method="POST">
+                    @csrf
+                    <button type="submit" 
+                            style="background: #333; color: #ff6b6b; padding: 12px 24px; border: 1px solid #444; border-radius: 6px; cursor: pointer; font-weight: 600; transition: all 0.2s;">
+                        Logout
+                    </button>
+                </form>
+                
+            </div>
+        </div>
 
     <div class="table-container">
         <table>
