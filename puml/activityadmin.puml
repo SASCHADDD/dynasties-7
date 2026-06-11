@@ -1,0 +1,50 @@
+@startuml
+skinparam style strictuml
+skinparam ActivityBackgroundColor #F8F9FA
+skinparam ActivityBorderColor #2C3E50
+skinparam arrowColor #34495E
+
+|#FEF9E7|Admin|
+|#F4F6F6|Sistem|
+|#EBF5FB|DB|
+
+|Admin|
+start
+:Buka Halaman Login Admin;
+:Isi Form Login Admin;
+
+|Sistem|
+:Proses Kredensial Admin;
+|DB|
+:Verifikasi Data & Role Admin;
+|Sistem|
+
+if (Data Valid & Role Sesuai?) then (Tidak)
+    :Tampilkan Pesan Error;
+    stop
+else (Ya)
+    |Admin|
+    :Masuk ke Dashboard Admin;
+    
+    if (Pilih Aksi Manajemen Film) then (Tambah/Edit Film)
+        :Input/Ubah Data Film;
+        |Sistem|
+        :Validasi Data Film;
+        |DB|
+        :Simpan/Update Data Film;
+    else (Hapus Film)
+        |Admin|
+        :Pilih Film & Klik Hapus;
+        |Sistem|
+        :Konfirmasi Penghapusan;
+        |DB|
+        :Hapus Data Film dari Tabel;
+    endif
+    
+    |Admin|
+    :Klik Logout;
+    |Sistem|
+    :Hapus Sesi Admin;
+    stop
+endif
+@enduml
