@@ -1,0 +1,62 @@
+@startuml
+' hide the spot
+hide circle
+skinparam linetype ortho
+
+entity "user" as user {
+  * id : BIGINT <<PK>>
+  --
+  * nama_pengguna : VARCHAR
+  * kata_sandi : VARCHAR
+  * dibuat_pada : TIMESTAMP
+  * diperbarui_pada : TIMESTAMP
+}
+
+entity "admin" as admin {
+  * id : BIGINT <<PK>>
+  --
+  * nama_pengguna : VARCHAR
+  * kata_sandi : VARCHAR
+  * dibuat_pada : TIMESTAMP
+  * diperbarui_pada : TIMESTAMP
+}
+
+entity "genre" as genre {
+  * id : BIGINT <<PK>>
+  --
+  * nama : VARCHAR
+  * dibuat_pada : TIMESTAMP
+  * diperbarui_pada : TIMESTAMP
+}
+
+entity "film" as film {
+  * id : BIGINT <<PK>>
+  --
+  * genre_id : BIGINT <<FK>>
+  * tipe : ENUM('film', 'serial')
+  * judul : VARCHAR
+  * deskripsi : TEXT
+  * durasi : INT
+  * tahun_rilis : INT
+  * poster : VARCHAR
+  * url_video : VARCHAR
+  * dibuat_pada : TIMESTAMP
+  * diperbarui_pada : TIMESTAMP
+}
+
+entity "riwayat_tontonan" as riwayat_tontonan {
+  * id : BIGINT <<PK>>
+  --
+  * user_id : BIGINT <<FK>>
+  * film_id : BIGINT <<FK>>
+  * progres : INT
+  * ditonton_pada : TIMESTAMP
+}
+
+genre ||--o{ film : "1 : M"
+user ||--o{ riwayat_tontonan : "1 : M"
+film ||--o{ riwayat_tontonan : "1 : M"
+admin ||--o{ film : "mengelola"
+admin ||--o{ genre : "mengelola"
+
+@enduml

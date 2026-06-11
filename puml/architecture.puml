@@ -1,0 +1,57 @@
+@startuml
+skinparam componentStyle rectangle
+
+node "Client / Browser" {
+  [Antarmuka Pengguna] as ui
+}
+
+node "Node.js Environment" {
+  
+  package "Testing Environment" {
+    [tests/\n(Jest Tests)] as tests
+    [src/\n(API Modules)] as src
+  }
+
+  [app.js\n(Main Server)] as appjs
+
+  package "Frontend & Storage" {
+    [uploads/\n(Images)] as uploads
+    [views/\n(EJS Templates)] as views
+    [public/\n(Static Assets)] as public
+  }
+
+  package "Routing & Middleware" {
+    [routes/authRoutes.js] as auth
+    [routes/filmRoutes.js] as film
+    [middlewares/middleware.js] as middleware
+  }
+
+  [database/db.js\n(MySQL Config)] as dbconfig
+}
+
+database "MySQL Server" {
+  [Database: dynasties] as db
+}
+
+' Relasi
+ui --> appjs : HTTP Requests
+
+tests --> src : Execute Tests
+src --> dbconfig : Query
+
+appjs --> views
+appjs --> public
+appjs --> uploads
+appjs --> auth
+appjs --> film
+appjs --> dbconfig : Import
+
+auth --> dbconfig : Query
+film --> dbconfig : Query
+
+auth ..> middleware : Cek Auth
+film ..> middleware : Cek Auth
+
+dbconfig --> db : Execute
+
+@enduml

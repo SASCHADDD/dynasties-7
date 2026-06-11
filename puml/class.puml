@@ -1,15 +1,25 @@
 @startuml
 skinparam classAttributeIconSize 0
 
-class Pengguna {
+class User {
   - id : BigInteger
   - nama_pengguna : String
   - kata_sandi : String
-  - peran : Enum('admin', 'pengguna')
   - dibuat_pada : Timestamp
   - diperbarui_pada : Timestamp
   + getAuthPassword() : String
   + riwayatTontonan() : Collection
+}
+
+class Admin {
+  - id : BigInteger
+  - nama_pengguna : String
+  - kata_sandi : String
+  - dibuat_pada : Timestamp
+  - diperbarui_pada : Timestamp
+  + getAuthPassword() : String
+  + kelolaFilm() : void
+  + kelolaGenre() : void
 }
 
 class Genre {
@@ -42,12 +52,14 @@ class RiwayatTontonan {
   - film_id : BigInteger
   - progres : Integer
   - ditonton_pada : Timestamp
-  + pengguna() : Pengguna
+  + user() : User
   + film() : Film
 }
 
 Genre "1" -- "0..*" Film : memiliki >
-Pengguna "1" -- "0..*" RiwayatTontonan : memiliki >
+User "1" -- "0..*" RiwayatTontonan : memiliki >
 Film "1" -- "0..*" RiwayatTontonan : memiliki >
+Admin "1" -- "0..*" Film : mengelola >
+Admin "1" -- "0..*" Genre : mengelola >
 
 @enduml
