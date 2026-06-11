@@ -1,0 +1,37 @@
+@startuml
+skinparam style strictuml
+skinparam sequence {
+    ArrowColor #2C3E50
+    LifeLineBorderColor #2C3E50
+    LifeLineBackgroundColor #ECF0F1
+}
+
+actor "Pengguna" as user
+participant "View\n(Navbar)" as view
+participant "Web Routes" as route
+participant "Model\nRiwayatTontonan" as model
+database "Database" as db
+
+user -> view : Klik menu "Riwayat Tontonan"
+activate view
+
+view -> route : GET /riwayat
+activate route
+
+route -> model : Ambil data riwayat (where pengguna_id)
+activate model
+
+model -> db : SELECT * FROM riwayat_tontonan JOIN film
+activate db
+db --> model : Return Data Riwayat
+deactivate db
+
+model --> route : Data Riwayat Tontonan
+deactivate model
+
+route --> view : Render riwayat.blade.php (Bawa data)
+deactivate route
+
+view --> user : Tampilkan daftar film yang pernah ditonton
+deactivate view
+@enduml

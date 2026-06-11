@@ -1,0 +1,39 @@
+@startuml
+skinparam style strictuml
+skinparam sequence {
+    ArrowColor #2C3E50
+    LifeLineBorderColor #2C3E50
+    LifeLineBackgroundColor #ECF0F1
+}
+
+actor "Admin" as admin
+participant "View\n(Admin Panel)" as view
+participant "FilmController" as controller
+participant "Model\nFilm" as model
+database "Database" as db
+
+admin -> view : Mengisi form film baru & klik "Simpan"
+activate view
+
+view -> controller : POST /films
+activate controller
+
+controller -> controller : Validasi data (judul, file poster, dll)
+
+controller -> model : Buat instance Film baru
+activate model
+
+model -> db : INSERT INTO film
+activate db
+db --> model : Success
+deactivate db
+
+model --> controller : Data berhasil disimpan
+deactivate model
+
+controller --> view : Redirect ke Dashboard Admin + Pesan Sukses
+deactivate controller
+
+view --> admin : Tampilkan tabel film terbaru
+deactivate view
+@enduml

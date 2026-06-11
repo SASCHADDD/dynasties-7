@@ -1,0 +1,26 @@
+@startuml
+skinparam style strictuml
+skinparam sequence {
+    ArrowColor #2C3E50
+    LifeLineBorderColor #2C3E50
+    LifeLineBackgroundColor #ECF0F1
+}
+
+actor "Pengguna / Admin" as user
+participant "View\n(Navbar)" as view
+participant "AuthController" as controller
+
+user -> view : Klik tombol "Logout"
+activate view
+
+view -> controller : POST /logout
+activate controller
+
+controller -> controller : Hapus Sesi (Auth::logout())
+
+controller --> view : Redirect ke Halaman Utama (/)
+deactivate controller
+
+view --> user : Tampilkan Halaman Utama
+deactivate view
+@enduml

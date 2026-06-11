@@ -1,0 +1,35 @@
+@startuml
+skinparam style strictuml
+skinparam sequence {
+    ArrowColor #2C3E50
+    LifeLineBorderColor #2C3E50
+    LifeLineBackgroundColor #ECF0F1
+}
+
+actor "Pengguna" as user
+participant "View\n(Login)" as view
+participant "AuthController" as controller
+database "Database" as db
+
+user -> view : Mengisi email/username & password, klik "Login"
+activate view
+
+view -> controller : POST /login
+activate controller
+
+controller -> db : Cek kecocokan kredensial
+activate db
+db --> controller : Return data & status validasi
+deactivate db
+
+alt Jika Kredensial Valid
+    controller -> controller : Buat Sesi Login (Session)
+    controller --> view : Redirect ke Dashboard
+    view --> user : Tampilkan Dashboard
+else Jika Kredensial Tidak Valid
+    controller --> view : Redirect kembali dengan pesan Error
+    view --> user : Tampilkan Error "Login Gagal"
+end
+deactivate controller
+deactivate view
+@enduml

@@ -1,0 +1,39 @@
+@startuml
+skinparam style strictuml
+skinparam sequence {
+    ArrowColor #2C3E50
+    LifeLineBorderColor #2C3E50
+    LifeLineBackgroundColor #ECF0F1
+}
+
+actor "Admin" as admin
+participant "View\n(Edit Film)" as view
+participant "FilmController" as controller
+participant "Model\nFilm" as model
+database "Database" as db
+
+admin -> view : Mengubah data film & klik "Update"
+activate view
+
+view -> controller : PUT /films/{id}
+activate controller
+
+controller -> controller : Validasi data perubahan
+
+controller -> model : Update data film berdasarkan ID
+activate model
+
+model -> db : UPDATE film SET ... WHERE id = {id}
+activate db
+db --> model : Success
+deactivate db
+
+model --> controller : Data berhasil diperbarui
+deactivate model
+
+controller --> view : Redirect ke Dashboard Admin + Pesan Sukses
+deactivate controller
+
+view --> admin : Tampilkan tabel film yang diperbarui
+deactivate view
+@enduml

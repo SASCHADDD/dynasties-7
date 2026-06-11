@@ -1,0 +1,38 @@
+@startuml
+skinparam style strictuml
+skinparam sequence {
+    ArrowColor #2C3E50
+    LifeLineBorderColor #2C3E50
+    LifeLineBackgroundColor #ECF0F1
+}
+
+actor "Pengunjung" as user
+participant "View\n(Register)" as view
+participant "AuthController" as controller
+participant "Model\nPengguna" as model
+database "Database" as db
+
+user -> view : Mengisi form registrasi & klik "Daftar"
+activate view
+
+view -> controller : POST /register (nama_pengguna, kata_sandi)
+activate controller
+
+controller -> controller : Validasi Input
+controller -> model : Simpan data pengguna
+activate model
+
+model -> db : INSERT INTO pengguna
+activate db
+db --> model : Success
+deactivate db
+
+model --> controller : Data tersimpan
+deactivate model
+
+controller --> view : Redirect ke halaman Login
+deactivate controller
+
+view --> user : Tampilkan halaman Login dengan pesan sukses
+deactivate view
+@enduml

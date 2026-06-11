@@ -1,0 +1,64 @@
+@startuml
+skinparam class {
+    BackgroundColor White
+    ArrowColor #2C3E50
+    BorderColor #2C3E50
+}
+hide circle
+
+class Pengguna {
+    + id : BigInteger
+    + nama_pengguna : String
+    - kata_sandi : String
+    + peran : String
+    + dibuat_pada : Timestamp
+    + diperbarui_pada : Timestamp
+    ---
+    + getAuthPassword() : String
+    + riwayatTontonan() : Collection
+}
+
+class Film {
+    + id : BigInteger
+    + genre_id : BigInteger
+    + tipe : String
+    + judul : String
+    + deskripsi : Text
+    + durasi : Integer
+    + tahun_rilis : Integer
+    + poster : String
+    + url_video : String
+    + dibuat_pada : Timestamp
+    + diperbarui_pada : Timestamp
+    ---
+    + genre() : Genre
+    + riwayatTontonan() : Collection
+}
+
+class Genre {
+    + id : BigInteger
+    + nama : String
+    + dibuat_pada : Timestamp
+    + diperbarui_pada : Timestamp
+    ---
+    + film() : Collection
+}
+
+class RiwayatTontonan {
+    + id : BigInteger
+    + pengguna_id : BigInteger
+    + film_id : BigInteger
+    + progres : Integer
+    + ditonton_pada : Timestamp
+    ---
+    + pengguna() : Pengguna
+    + film() : Film
+}
+
+' Definisi Relasi / Hubungan antar Class '
+
+Genre "1" -- "0..*" Film : Memiliki >
+Pengguna "1" -- "0..*" RiwayatTontonan : Memiliki >
+Film "1" -- "0..*" RiwayatTontonan : Memiliki >
+
+@enduml
