@@ -1,0 +1,30 @@
+@startuml
+skinparam componentStyle rectangle
+
+node "Client Layer" {
+  [Web Browser] as browser
+}
+
+node "Server Environment (Laragon / PHP 8.x)" {
+  node "Web Server" as webserver
+  
+  package "Laravel Application (MVC)" {
+    [Routes] as routes
+    [Controllers] as controllers
+    [Models (Eloquent)] as models
+    [Views (Blade)] as views
+  }
+  
+  database "MySQL Database" as db
+}
+
+browser <--> webserver : HTTP / HTTPS Request & Response
+
+webserver --> routes : Meneruskan Request
+routes --> controllers : Mengarahkan ke fungsi yang sesuai
+controllers --> models : Meminta/Mengubah Data (CRUD)
+models <--> db : Menjalankan Query SQL
+controllers --> views : Mengirimkan Data untuk Dirender
+views --> webserver : Mengembalikan HTML Web Page
+
+@enduml
