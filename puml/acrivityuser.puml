@@ -1,0 +1,65 @@
+@startuml
+skinparam style strictuml
+skinparam ActivityBackgroundColor #F8F9FA
+skinparam ActivityBorderColor #2C3E50
+skinparam arrowColor #34495E
+skinparam linetype ortho
+
+|#FFFFFF|Pengguna|
+|#F4F6F6|Sistem|
+|#EBF5FB|DB|
+
+|Pengguna|
+start
+:Buka Halaman Web;
+
+if (Sudah Punya Akun?) then (Sudah)
+else (Belum)
+    :Isi Form Registrasi;
+    |Sistem|
+    :Proses Data Registrasi;
+    |DB|
+    :Simpan Data Akun Baru;
+    |Pengguna|
+    :Arahkan ke Halaman Login;
+endif
+
+:Isi Username & Password;
+|Sistem|
+:Periksa Username & Password;
+|DB|
+:Cek Kecocokan Data Login;
+
+|Sistem|
+if (Data Benar?) then (Tidak)
+    :Tampilkan Pesan Error\n(Gagal Login);
+    stop
+else (Ya)
+    |Pengguna|
+    :Masuk ke Dashboard User;
+    
+    fork
+        :Pilih & Tonton Film;
+        |Sistem|
+        :Proses Aktivitas Tontonan;
+        |DB|
+        -->
+        :Simpan ke Tabel Riwayat;
+    fork again
+        |Pengguna|
+        :Buka Halaman Riwayat;
+        |Sistem|
+        :Ambil Data Riwayat;
+        |DB|
+        :Query Data Riwayat;
+        |Sistem|
+        :Tampilkan Riwayat Film;
+    end fork
+    
+    |Pengguna|
+    :Klik Logout;
+    |Sistem|
+    :Hapus Sesi Pengguna;
+    stop
+endif
+@enduml
