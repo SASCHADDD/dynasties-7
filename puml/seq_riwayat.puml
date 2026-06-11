@@ -1,0 +1,41 @@
+@startuml
+skinparam maxMessageSize 150
+
+actor "Pengguna" as client
+participant "app.js\n(Main Server)" as app
+participant "routes/\nfilmRoutes.js" as route
+participant "middlewares/\nmiddleware.js" as auth
+participant "database/\ndb.js" as dbconfig
+database "MySQL\n(dynasties)" as db
+participant "views/\n(EJS)" as views
+
+client -> app : GET /riwayat
+activate app
+
+app -> route : Teruskan ke Router
+activate route
+
+route -> auth : Cek Autentikasi
+activate auth
+auth --> route : Valid
+deactivate auth
+
+route -> dbconfig : Query riwayat_tontonan + JOIN film
+activate dbconfig
+dbconfig -> db : SELECT ... JOIN film
+activate db
+db --> dbconfig : Data Riwayat
+deactivate db
+dbconfig --> route : Return List Riwayat
+deactivate dbconfig
+
+route -> views : Render 'riwayat.ejs'
+activate views
+views --> route : HTML String
+deactivate views
+
+route --> app : HTML Response
+app --> client : Tampilkan Daftar Riwayat
+deactivate route
+deactivate app
+@enduml

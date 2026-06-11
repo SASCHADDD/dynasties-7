@@ -1,0 +1,45 @@
+@startuml
+skinparam maxMessageSize 150
+
+actor "Client (Browser)" as client
+participant "app.js\n(Main Server)" as app
+participant "routes/\nauthRoutes.js" as route
+participant "database/\ndb.js" as dbconfig
+database "MySQL\n(dynasties)" as db
+participant "views/\n(EJS)" as views
+
+client -> app : POST /login (username, password)
+activate app
+
+app -> route : Teruskan ke authRoutes
+activate route
+
+route -> dbconfig : Query cari user berdasarkan username
+activate dbconfig
+
+dbconfig -> db : SELECT * FROM user/admin
+activate db
+db --> dbconfig : Data user
+deactivate db
+
+dbconfig --> route : Return data user
+deactivate dbconfig
+
+route -> route : Verifikasi password
+
+alt Password Cocok
+    route -> route : Set Session (login sukses)
+    route --> app : Redirect ke /dashboard
+    app --> client : 302 Redirect Dashboard
+else Password Salah / User Tidak Ditemukan
+    route -> views : Render 'login.ejs' + Error Message
+    activate views
+    views --> route : Return HTML
+    deactivate views
+    route --> app : HTML Response
+    app --> client : Tampilkan Halaman Login (Error)
+end
+
+deactivate route
+deactivate app
+@enduml

@@ -1,0 +1,37 @@
+@startuml
+skinparam maxMessageSize 150
+
+actor "Admin" as client
+participant "app.js\n(Main Server)" as app
+participant "routes/\nfilmRoutes.js" as route
+participant "middlewares/\nmiddleware.js" as auth
+participant "database/\ndb.js" as dbconfig
+database "MySQL\n(dynasties)" as db
+
+client -> app : POST /admin/film (Tambah/Edit Film)
+activate app
+
+app -> route : Teruskan ke Router
+activate route
+
+route -> auth : Cek Autentikasi & Role Admin
+activate auth
+auth --> route : Valid (Is Admin)
+deactivate auth
+
+route -> route : Validasi Data Input & Proses Upload Poster
+
+route -> dbconfig : Insert/Update data film
+activate dbconfig
+dbconfig -> db : INSERT/UPDATE INTO film...
+activate db
+db --> dbconfig : Success
+deactivate db
+dbconfig --> route : Return Status
+deactivate dbconfig
+
+route --> app : Redirect ke Daftar Film
+app --> client : 302 Redirect
+deactivate route
+deactivate app
+@enduml

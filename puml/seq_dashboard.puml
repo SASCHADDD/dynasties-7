@@ -1,0 +1,41 @@
+@startuml
+skinparam maxMessageSize 150
+
+actor "Client (Browser)" as client
+participant "app.js\n(Main Server)" as app
+participant "routes/\nfilmRoutes.js" as route
+participant "middlewares/\nmiddleware.js" as auth
+participant "database/\ndb.js" as dbconfig
+database "MySQL\n(dynasties)" as db
+participant "views/\n(EJS)" as views
+
+client -> app : GET /dashboard
+activate app
+
+app -> route : Teruskan ke Router
+activate route
+
+route -> auth : Cek Autentikasi
+activate auth
+auth --> route : Valid (Lanjut)
+deactivate auth
+
+route -> dbconfig : Query daftar film terbaru/populer
+activate dbconfig
+dbconfig -> db : SELECT * FROM film LIMIT X
+activate db
+db --> dbconfig : Data Film
+deactivate db
+dbconfig --> route : Return List Film
+deactivate dbconfig
+
+route -> views : Render 'dashboard.ejs' + List Film
+activate views
+views --> route : HTML String
+deactivate views
+
+route --> app : HTML Response
+app --> client : Tampilkan Dashboard
+deactivate route
+deactivate app
+@enduml

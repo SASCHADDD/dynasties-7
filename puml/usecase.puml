@@ -9,10 +9,12 @@ rectangle "Sistem Rekomendasi Film" {
   usecase "Tonton Film" as tonton
   usecase "Lihat Riwayat Tontonan" as riwayat
   usecase "Kelola Data Film" as kelolafilm
+  usecase "Register" as register
   usecase "Login" as login
   usecase "Logout" as logout
 }
 
+pengguna -- register
 pengguna -- dashboard
 pengguna -- tonton
 pengguna -- riwayat

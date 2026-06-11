@@ -1,0 +1,63 @@
+@startuml
+skinparam maxMessageSize 150
+
+actor "Client (Browser)" as client
+participant "app.js\n(Main Server)" as app
+participant "routes/\nauthRoutes.js" as route
+participant "database/\ndb.js" as dbconfig
+database "MySQL\n(dynasties)" as db
+participant "views/\n(EJS)" as views
+
+client -> app : GET /register (Tampilkan Form)
+activate app
+app -> route : Teruskan ke authRoutes
+activate route
+route -> views : Render 'register.ejs'
+activate views
+views --> route : HTML String
+deactivate views
+route --> app : HTML Response
+app --> client : Tampilkan Form Register
+deactivate route
+deactivate app
+
+client -> app : POST /register (nama_pengguna, kata_sandi)
+activate app
+app -> route : Teruskan ke authRoutes
+activate route
+
+route -> dbconfig : Cek apakah username sudah ada
+activate dbconfig
+dbconfig -> db : SELECT * FROM user WHERE nama_pengguna...
+activate db
+db --> dbconfig : Hasil Pencarian
+deactivate db
+dbconfig --> route : Return Hasil
+deactivate dbconfig
+
+alt Username Sudah Digunakan
+    route -> views : Render 'register.ejs' + Error Message
+    activate views
+    views --> route : HTML String
+    deactivate views
+    route --> app : HTML Response
+    app --> client : Tampilkan Pesan Error
+else Username Tersedia
+    route -> route : Hash Password
+    route -> dbconfig : Simpan Data User Baru
+    activate dbconfig
+    dbconfig -> db : INSERT INTO user (nama_pengguna, kata_sandi, ...)
+    activate db
+    db --> dbconfig : Success
+    deactivate db
+    dbconfig --> route : Return Status
+    deactivate dbconfig
+    
+    route --> app : Redirect ke /login
+    app --> client : HTTP 302 Redirect (ke halaman Login)
+end
+
+deactivate route
+deactivate app
+
+@enduml
