@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 // 1. Halaman Publik (Bisa diakses tanpa login)
-Route::get('/', function () { return view('welcome'); });
+Route::get('/', function () { return redirect('/login'); });
 Route::get('/register', function () { return view('auth.register'); })->name('register');
 Route::get('/login', function () { return view('auth.login'); })->name('login');
 Route::post('/register', [AuthController::class, 'register'])->name('register.submit');
